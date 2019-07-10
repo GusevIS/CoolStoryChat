@@ -1,6 +1,5 @@
 package sample;
 
-import javax.jws.soap.SOAPBinding;
 import java.sql.*;
 
 public class DatabaseHandler extends Configs{
@@ -46,6 +45,25 @@ public class DatabaseHandler extends Configs{
             PreparedStatement preparedStatement = getDbConnection().prepareStatement(select);
             preparedStatement.setString(1, userName);
             preparedStatement.setString(2, userPass);
+
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getUser(String userName){
+        ResultSet resultSet = null;
+
+        String select = "SELECT * FROM " + UserFields.USER_TABLE + " WHERE " +
+                UserFields.USERS_NAME + "=?";
+
+        try {
+            PreparedStatement preparedStatement = getDbConnection().prepareStatement(select);
+            preparedStatement.setString(1, userName);
 
             resultSet = preparedStatement.executeQuery();
         } catch (SQLException e) {

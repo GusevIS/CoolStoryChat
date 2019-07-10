@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -34,6 +35,9 @@ public class AuthorisationController {
     private Button signUpButton;
 
     @FXML
+    private Label errorsLabel;
+
+    @FXML
     void initialize() {
         DatabaseHandler dbHandler = new DatabaseHandler();
 
@@ -41,8 +45,8 @@ public class AuthorisationController {
             String loginName = loginField.getText().trim();
             String loginPass = passwordField.getText().trim();
 
-            if(!loginName.isEmpty() && !loginPass.isEmpty())
-                if(signInUser(loginName, loginPass)) {
+            if(!loginName.isEmpty() && !loginPass.isEmpty()) {
+                if (getUser(loginName, loginPass)) {
                     signInButton.getScene().getWindow().hide();
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(getClass().getResource("chatForm.fxml"));
@@ -56,16 +60,48 @@ public class AuthorisationController {
                     Parent root = loader.getRoot();
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root));
-                    stage.showAndWait();
-                }
+                    stage.show();
+                } else
+                    errorsLabel.setText("Incorrect username and/or password");
+            } else
+                errorsLabel.setText("Please, enter username and password");
         });
 
-        signUpButton.setOnAction(event -> dbHandler.signUpUser(loginField.getText(), passwordField.getText()));
+        signUpButton.setOnAction(event -> {
+            String loginName = loginField.getText().trim();
+            String loginPass = passwordField.getText().trim();
+
+            if(!loginName.isEmpty() && !loginPass.isEmpty()) {
+                if (!userExists(loginName)) {
+                    dbHandler.signUpUser(loginName, loginPass);
+                    errorsLabel.setText("Successful registration");
+                }
+                else
+                    errorsLabel.setText("User with the same name already exists");
+            } else
+                errorsLabel.setText("Please, enter username and password");
+        });
     }
 
-    private boolean signInUser(String loginName, String loginPass) {
+    private boolean getUser(String loginName, String loginPass) {
         DatabaseHandler dbHandler = new DatabaseHandler();
         ResultSet result = dbHandler.getUser(loginName, loginPass);
+
+        int counter = 0;
+        try {
+            while (result.next()) {
+                counter++;
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return (counter != 0);
+    }
+
+    private boolean userExists(String loginName) {
+        DatabaseHandler dbHandler = new DatabaseHandler();
+        ResultSet result = dbHandler.getUser(loginName);
 
         int counter = 0;
         try {

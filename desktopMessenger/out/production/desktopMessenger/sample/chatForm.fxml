@@ -26,5 +26,10 @@
             <Font name="Arial Bold" size="28.0" />
          </font>
       </Label>
+      <Button fx:id="LogOutButton" layoutX="432.0" layoutY="14.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: fff7fa;" text="Log Out" textFill="#ff97bb">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

@@ -1,13 +1,10 @@
 package sample;
 
 import javax.jws.soap.SOAPBinding;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DatabaseHandler extends Configs{
-    Connection dbConnection;
+    private Connection dbConnection;
 
     public Connection getDbConnection() throws ClassNotFoundException, SQLException{
         String URL = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?verifyServerCertificate=false"+
@@ -37,5 +34,25 @@ public class DatabaseHandler extends Configs{
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public ResultSet getUser(String userName, String userPass){
+        ResultSet resultSet = null;
+
+        String select = "SELECT * FROM " + UserFields.USER_TABLE + " WHERE " +
+                UserFields.USERS_NAME + "=? AND " + UserFields.USERS_PASSWORD + "=?";
+
+        try {
+            PreparedStatement preparedStatement = getDbConnection().prepareStatement(select);
+            preparedStatement.setString(1, userName);
+            preparedStatement.setString(2, userPass);
+
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 }

@@ -2,6 +2,8 @@ package sample;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,39 +38,44 @@ public class AuthorisationController {
         DatabaseHandler dbHandler = new DatabaseHandler();
 
         signInButton.setOnAction(event -> {
-            //Sign in
             String loginName = loginField.getText().trim();
             String loginPass = passwordField.getText().trim();
 
             if(!loginName.isEmpty() && !loginPass.isEmpty())
-                signInUser(loginName, loginPass);
+                if(signInUser(loginName, loginPass)) {
+                    signInButton.getScene().getWindow().hide();
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("chatForm.fxml"));
 
+                    try {
+                        loader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-            signInButton.getScene().getWindow().hide();
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("chatForm.fxml"));
-
-            try{
-                loader.load();
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-
-            Parent root = loader.getRoot();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
+                    Parent root = loader.getRoot();
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root));
+                    stage.showAndWait();
+                }
         });
 
-        signUpButton.setOnAction(event -> {
-            //Sign up
-
-            dbHandler.signUpUser(loginField.getText(), passwordField.getText());
-        });
+        signUpButton.setOnAction(event -> dbHandler.signUpUser(loginField.getText(), passwordField.getText()));
     }
 
-    private void signInUser(String loginName, String loginPass) {
+    private boolean signInUser(String loginName, String loginPass) {
+        DatabaseHandler dbHandler = new DatabaseHandler();
+        ResultSet result = dbHandler.getUser(loginName, loginPass);
 
+        int counter = 0;
+        try {
+            while (result.next()) {
+                counter++;
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
 
+        return (counter != 0);
     }
 }

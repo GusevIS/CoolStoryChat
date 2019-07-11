@@ -1,6 +1,7 @@
 package sample;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -13,6 +14,9 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 public class ChatController {
+    private Socket clientSocket;
+    private BufferedReader in;
+    private BufferedWriter out;
 
     @FXML
     private ResourceBundle resources;
@@ -37,9 +41,22 @@ public class ChatController {
     private Button LogOutButton;
 
     @FXML
-    void initialize() {
+    void initialize() throws IOException {
+        inputMsgArea.setWrapText(true);
+        outputMsgArea.setWrapText(true);
+        outputMsgArea.setEditable(false);
+
         sendButton.setOnAction(event -> {
-            //Send message to server
+            String msg = inputMsgArea.getText().trim();
+            if(!msg.isEmpty()){
+                try {
+                    out.write(msg + "\n");
+                    out.flush();
+                    inputMsgArea.setText("");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         smileChoiceButton.setOnAction(event -> {
@@ -63,6 +80,26 @@ public class ChatController {
             stage.show();
         });
 
+        getServerConnection();
+    }
 
+    private void getServerConnection() throws IOException {
+        clientSocket = new Socket("localhost", 1000);
+
+        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+        new Thread(() -> {
+            String msgFromServer;
+            try {
+                while (true) {
+                    msgFromServer = in.readLine();
+                    if (msgFromServer.equals("stop"))
+                        break;
+                    outputMsgArea.setText(msgFromServer + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

@@ -20,6 +20,7 @@ public class Main {
             semaphore.acquire();
             Socket clientSocket = serverSocket.accept();
             serverThreadList.add(new ServerThread(clientSocket));
+            System.out.println("Client connected");
         }
     }
 }

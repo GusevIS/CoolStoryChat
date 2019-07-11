@@ -27,6 +27,7 @@ public class ServerThread extends Thread {
 
         while (true) {
             String msg = in.readLine();
+            System.out.println(msg);
             if(msg.equals("Log out"))
                 break;
 

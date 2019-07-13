@@ -2,18 +2,35 @@ import java.io.*;
 import java.net.Socket;
 
 public class ServerThread extends Thread {
-    private Socket clientSocket;
-    private static BufferedWriter out;
+    private Socket socket;
+    public final String REMOVE_THREAD_COMMAND = "/Log out";
+    public final String STOP_CLIENT_COMMAND = "/Stop";
+    private static BufferedWriter output;
+    private static BufferedReader input;
 
-    public ServerThread(Socket clientSocket){
-        this.clientSocket = clientSocket;
+    public ServerThread(Socket clientSocket) throws IOException {
+        this.socket = clientSocket;
+        input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        output = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
         start();
     }
 
     @Override
     public void run() {
+        String msg;
         try {
-            serve(clientSocket);
+            while (true) {
+                msg = input.readLine();
+                System.out.println(msg);
+                if(msg.equals(REMOVE_THREAD_COMMAND)) {
+                    sendMsg(STOP_CLIENT_COMMAND);
+                    Main.removeServerThread(this);
+                    break;
+                }
+
+                for(ServerThread thread: Main.serverThreadList)
+                    thread.sendMsg(msg);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -21,23 +38,28 @@ public class ServerThread extends Thread {
         }
     }
 
-    private static void serve(Socket clientSocket) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-
+    private void serve() throws IOException {
         while (true) {
-            String msg = in.readLine();
+            String msg = input.readLine();
             System.out.println(msg);
-            if(msg.equals("Log out"))
+            if(msg.equals(REMOVE_THREAD_COMMAND)) {
+                sendMsg(STOP_CLIENT_COMMAND);
+                Main.removeServerThread(this);
                 break;
+            }
 
             for(ServerThread thread: Main.serverThreadList)
                 thread.sendMsg(msg);
         }
     }
 
-    private void sendMsg(String msg) throws IOException {
-        out.write(msg + "\n");
-        out.flush();
+    private void sendMsg(String msg){
+        try {
+            output.write(msg + "\n");
+            output.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

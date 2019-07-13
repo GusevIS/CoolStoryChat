@@ -48,6 +48,8 @@ public class AuthorisationController {
 
             if(!loginName.isEmpty() && !loginPass.isEmpty()) {
                 if (getUser(loginName, loginPass)) {
+                    ChatController.setClientName(loginName);
+
                     signInButton.getScene().getWindow().hide();
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(getClass().getResource("chatForm.fxml"));
@@ -87,6 +89,10 @@ public class AuthorisationController {
     private boolean getUser(String loginName, String loginPass) {
         DatabaseHandler dbHandler = new DatabaseHandler();
         ResultSet result = dbHandler.getUser(loginName, loginPass);
+        if(result == null) {
+            //ебануть чето что скажет шо база данных афк
+            setErrorForm();
+        }
 
         int counter = 0;
         try {
@@ -103,6 +109,10 @@ public class AuthorisationController {
     private boolean userExists(String loginName) {
         DatabaseHandler dbHandler = new DatabaseHandler();
         ResultSet result = dbHandler.getUser(loginName);
+        if(result == null) {
+            //ебануть чето что скажет шо база данных афк
+            setErrorForm();
+        }
 
         int counter = 0;
         try {
@@ -116,9 +126,20 @@ public class AuthorisationController {
         return (counter != 0);
     }
 
+    private void setErrorForm(){
+        signInButton.getScene().getWindow().hide();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("errorForm.fxml"));
 
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-
-
-
+        Parent root = loader.getRoot();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 }

@@ -14,9 +14,12 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 public class ChatController {
+    public final String REMOVE_THREAD_COMMAND = "/Log out";
+    public final String STOP_CLIENT_COMMAND = "/Stop";
+    private static String clientName;
     private Socket clientSocket;
     private BufferedReader in;
-    private BufferedWriter out;
+    public static BufferedWriter out;
 
     @FXML
     private ResourceBundle resources;
@@ -36,7 +39,6 @@ public class ChatController {
     @FXML
     private ChoiceBox<?> smileChoiceButton;
 
-
     @FXML
     private Button LogOutButton;
 
@@ -50,7 +52,7 @@ public class ChatController {
             String msg = inputMsgArea.getText().trim();
             if(!msg.isEmpty()){
                 try {
-                    out.write(msg + "\n");
+                    out.write(clientName + ">> " + msg + "\n");
                     out.flush();
                     inputMsgArea.setText("");
                 } catch (IOException e) {
@@ -64,6 +66,13 @@ public class ChatController {
         });
 
         LogOutButton.setOnAction(event -> {
+            try {
+                out.write(REMOVE_THREAD_COMMAND + "\n");
+                out.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             LogOutButton.getScene().getWindow().hide();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("authorisationForm.fxml"));
@@ -79,12 +88,11 @@ public class ChatController {
             stage.setScene(new Scene(root));
             stage.show();
         });
-
         getServerConnection();
     }
 
     private void getServerConnection() throws IOException {
-        clientSocket = new Socket("localhost", 1000);
+        clientSocket = new Socket("localhost", 5000);
 
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
@@ -93,13 +101,18 @@ public class ChatController {
             try {
                 while (true) {
                     msgFromServer = in.readLine();
-                    if (msgFromServer.equals("stop"))
+                    if (msgFromServer.equals(STOP_CLIENT_COMMAND))
                         break;
-                    outputMsgArea.setText(msgFromServer + "\n");
+                    outputMsgArea.appendText(msgFromServer + "\n");
+                    System.out.println(msgFromServer);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    public static void setClientName(String name){
+        clientName = name;
     }
 }

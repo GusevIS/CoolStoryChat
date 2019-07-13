@@ -73,4 +73,21 @@ public class DatabaseHandler extends Configs{
         }
         return resultSet;
     }
+
+//    public int getUserID(String userName){
+//        ResultSet resulSet = null;
+//
+//        String select = "SELECT * FROM " + UserFields.USER_TABLE + " WHERE " +
+//                UserFields.USERS_NAME + "=?";
+//
+//        try{
+//            PreparedStatement preparedStatement = getDbConnection().prepareStatement(select);
+//            preparedStatement.setString(1, userName);
+//        }catch (SQLException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 }

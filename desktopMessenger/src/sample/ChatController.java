@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +16,7 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 public class ChatController {
-    public final String REMOVE_THREAD_COMMAND = "/Log out";
+    public static final String REMOVE_THREAD_COMMAND = "/Log out";
     public final String STOP_CLIENT_COMMAND = "/Stop";
     private static String clientName;
     private Socket clientSocket;
@@ -67,6 +69,7 @@ public class ChatController {
 
         LogOutButton.setOnAction(event -> {
             try {
+                System.out.println(REMOVE_THREAD_COMMAND);
                 out.write(REMOVE_THREAD_COMMAND + "\n");
                 out.flush();
             } catch (IOException e) {
@@ -92,7 +95,7 @@ public class ChatController {
     }
 
     private void getServerConnection() throws IOException {
-        clientSocket = new Socket("localhost", 5000);
+        clientSocket = new Socket("localhost", 4999);
 
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
@@ -101,9 +104,10 @@ public class ChatController {
             try {
                 while (true) {
                     msgFromServer = in.readLine();
+                    final String textOutputMsgArea = msgFromServer;
                     if (msgFromServer.equals(STOP_CLIENT_COMMAND))
                         break;
-                    outputMsgArea.appendText(msgFromServer + "\n");
+                    Platform.runLater(() -> outputMsgArea.appendText(textOutputMsgArea + "\n"));
                     System.out.println(msgFromServer);
                 }
             } catch (IOException e) {

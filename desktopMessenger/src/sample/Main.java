@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sun.reflect.CallerSensitive;
 
 import java.io.IOException;
 
@@ -23,7 +22,7 @@ public class Main extends Application {
     public void stop(){
         if(ChatController.out != null){
             try {
-                ChatController.out.write("Log out" + "\n");
+                ChatController.out.write(ChatController.REMOVE_THREAD_COMMAND + "\n");
                 ChatController.out.flush();
             } catch (IOException e) {
                 e.printStackTrace();

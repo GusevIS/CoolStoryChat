@@ -1,4 +1,4 @@
-package sample;
+package desktopMessenger;
 
 public class ErrorFormController {
 }

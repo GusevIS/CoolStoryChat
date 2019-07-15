@@ -1,4 +1,4 @@
-package sample;
+package desktopMessenger;
 
 import java.sql.*;
 

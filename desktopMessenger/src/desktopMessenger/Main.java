@@ -1,4 +1,4 @@
-package sample;
+package desktopMessenger;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -20,10 +20,10 @@ public class Main extends Application {
 
     @Override
     public void stop(){
-        if(ChatController.out != null){
+        if(AuthorisationController.out != null){
             try {
-                ChatController.out.write(ChatController.REMOVE_THREAD_COMMAND + "\n");
-                ChatController.out.flush();
+                AuthorisationController.out.writeObject(new ClientMessage("", "", MessageFlag.LOG_OUT_FROM_SERVER));
+                AuthorisationController.out.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }

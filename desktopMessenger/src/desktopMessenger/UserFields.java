@@ -1,4 +1,4 @@
-package sample;
+package desktopMessenger;
 
 public class UserFields {
     public static final String USER_TABLE = "users";

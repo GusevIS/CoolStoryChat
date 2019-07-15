@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="120.0" prefWidth="300.0" style="-fx-background-color: ff97bb;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ErrorFormController">
+<AnchorPane prefHeight="120.0" prefWidth="300.0" style="-fx-background-color: ff97bb;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktopMessenger.ErrorFormController">
    <children>
       <AnchorPane layoutY="14.0" prefHeight="100.0" prefWidth="300.0" style="-fx-background-color: fff7fa;">
          <children>

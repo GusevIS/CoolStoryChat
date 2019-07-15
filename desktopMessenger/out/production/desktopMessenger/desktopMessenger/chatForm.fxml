@@ -7,7 +7,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: ff97bb;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ChatController">
+<?import javafx.scene.control.ComboBox?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: ff97bb;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktopMessenger.ChatController">
    <children>
       <AnchorPane layoutY="86.0" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: fff7fa;">
          <children>
@@ -18,7 +19,7 @@
             </Button>
             <TextArea fx:id="outputMsgArea" layoutX="15.0" layoutY="14.0" prefHeight="490.0" prefWidth="470.0" />
             <TextArea fx:id="inputMsgArea" layoutX="85.0" layoutY="519.0" prefHeight="60.0" prefWidth="330.0" />
-            <ChoiceBox fx:id="smileChoiceButton" layoutX="15.0" layoutY="519.0" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: ff97bb;" />
+            <ComboBox fx:id="smileChoiceButton" layoutX="15.0" layoutY="519.0" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: ff97bb;" />
          </children>
       </AnchorPane>
       <Label layoutX="152.0" layoutY="14.0" prefHeight="60.0" prefWidth="197.0" text="CoolStoryChat" textAlignment="CENTER" textFill="WHITE">

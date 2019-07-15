@@ -1,4 +1,4 @@
-package sample;
+package desktopMessenger;
 
 public class Configs {
     protected  String dbHost = "localHost";

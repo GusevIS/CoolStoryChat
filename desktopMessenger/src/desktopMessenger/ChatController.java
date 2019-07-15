@@ -1,4 +1,4 @@
-package sample;
+package desktopMessenger;
 
 import java.io.*;
 import java.net.Socket;
@@ -12,16 +12,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 public class ChatController {
-    public static final String REMOVE_THREAD_COMMAND = "/Log out";
-    public final String STOP_CLIENT_COMMAND = "/Stop";
     private static String clientName;
-    private Socket clientSocket;
-    private BufferedReader in;
-    public static BufferedWriter out;
 
     @FXML
     private ResourceBundle resources;
@@ -39,7 +35,7 @@ public class ChatController {
     private TextArea inputMsgArea;
 
     @FXML
-    private ChoiceBox<?> smileChoiceButton;
+    private ComboBox<?> smileChoiceButton;
 
     @FXML
     private Button LogOutButton;
@@ -54,8 +50,8 @@ public class ChatController {
             String msg = inputMsgArea.getText().trim();
             if(!msg.isEmpty()){
                 try {
-                    out.write(clientName + ">> " + msg + "\n");
-                    out.flush();
+                    AuthorisationController.out.writeObject(new ClientMessage(clientName, msg, MessageFlag.DEFAULT_MESSAGE));
+                    AuthorisationController.out.flush();
                     inputMsgArea.setText("");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -69,9 +65,9 @@ public class ChatController {
 
         LogOutButton.setOnAction(event -> {
             try {
-                System.out.println(REMOVE_THREAD_COMMAND);
-                out.write(REMOVE_THREAD_COMMAND + "\n");
-                out.flush();
+                System.out.println("log out from chat");
+                AuthorisationController.out.writeObject(new ClientMessage("", "", MessageFlag.LOG_OUT_FROM_CHAT));
+                AuthorisationController.out.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -91,26 +87,33 @@ public class ChatController {
             stage.setScene(new Scene(root));
             stage.show();
         });
+
         getServerConnection();
     }
 
-    private void getServerConnection() throws IOException {
-        clientSocket = new Socket("localhost", 4999);
-
-        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+    private void getServerConnection(){
         new Thread(() -> {
-            String msgFromServer;
+            ClientMessage messageFromServer;
             try {
-                while (true) {
-                    msgFromServer = in.readLine();
-                    final String textOutputMsgArea = msgFromServer;
-                    if (msgFromServer.equals(STOP_CLIENT_COMMAND))
-                        break;
-                    Platform.runLater(() -> outputMsgArea.appendText(textOutputMsgArea + "\n"));
-                    System.out.println(msgFromServer);
+                while (AuthorisationController.clientIsConnectedToChat) {
+                    messageFromServer = (ClientMessage) AuthorisationController.in.readObject();
+
+                    switch (messageFromServer.flag){
+                        case DEFAULT_MESSAGE:
+                            final String textOutputMsgArea = messageFromServer.username + ">> " + messageFromServer.message;
+                            Platform.runLater(() -> outputMsgArea.appendText(textOutputMsgArea + "\n"));
+                            break;
+
+                        case LOG_OUT_FROM_CHAT:
+                            AuthorisationController.clientIsConnectedToChat = false;
+                            break;
+
+                        case LOG_OUT_FROM_SERVER:
+                            AuthorisationController.clientIsConnectedToChat = false;
+                            break;
+                    }
                 }
-            } catch (IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }).start();

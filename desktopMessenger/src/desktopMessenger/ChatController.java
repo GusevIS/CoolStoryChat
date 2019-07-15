@@ -50,7 +50,7 @@ public class ChatController {
             String msg = inputMsgArea.getText().trim();
             if(!msg.isEmpty()){
                 try {
-                    AuthorisationController.out.writeObject(new ClientMessage(clientName, msg, MessageFlag.DEFAULT_MESSAGE));
+                    AuthorisationController.out.writeObject(new ClientMessage(getClientName(), msg, MessageFlag.DEFAULT_MESSAGE));
                     AuthorisationController.out.flush();
                     inputMsgArea.setText("");
                 } catch (IOException e) {
@@ -95,7 +95,7 @@ public class ChatController {
         new Thread(() -> {
             ClientMessage messageFromServer;
             try {
-                while (AuthorisationController.clientIsConnectedToChat) {
+                while (AuthorisationController.getClientIsConnectedToChat()) {
                     messageFromServer = (ClientMessage) AuthorisationController.in.readObject();
 
                     switch (messageFromServer.flag){
@@ -105,11 +105,11 @@ public class ChatController {
                             break;
 
                         case LOG_OUT_FROM_CHAT:
-                            AuthorisationController.clientIsConnectedToChat = false;
+                            AuthorisationController.setClientIsConnectedToChat(false);
                             break;
 
                         case LOG_OUT_FROM_SERVER:
-                            AuthorisationController.clientIsConnectedToChat = false;
+                            AuthorisationController.setClientIsConnectedToChat(false);
                             break;
                     }
                 }
@@ -121,5 +121,9 @@ public class ChatController {
 
     public static void setClientName(String name){
         clientName = name;
+    }
+
+    public String getClientName(){
+        return clientName;
     }
 }

@@ -7,8 +7,8 @@ import java.util.LinkedList;
 
 public class Server {
 
-    public static final int PORT = 4999;
-    public static LinkedList<ServerThread> serverList = new LinkedList<>();
+    private static final int PORT = 4999;
+    private static LinkedList<ServerThread> serverList = new LinkedList<>();
 
     public static void main(String[] args) throws IOException {
         ServerSocket server = new ServerSocket(PORT);
@@ -25,6 +25,10 @@ public class Server {
         } finally {
             server.close();
         }
+    }
+
+    public static LinkedList<ServerThread> getServerList(){
+        return serverList;
     }
 
     public static void removeServerThread(ServerThread thread){

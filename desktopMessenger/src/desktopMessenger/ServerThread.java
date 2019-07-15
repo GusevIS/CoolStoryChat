@@ -70,7 +70,7 @@ class ServerThread extends Thread {
                     switch (clientMessage.flag){
                         case DEFAULT_MESSAGE:
                             System.out.println(clientMessage.username + ">> " + clientMessage.message);
-                            for(ServerThread thread : Server.serverList){
+                            for(ServerThread thread : Server.getServerList()){
                                 thread.sendMessage(clientMessage);
                             }
                             break;
@@ -104,10 +104,16 @@ class ServerThread extends Thread {
     private boolean getUser(String loginName, String loginPass) {
         ResultSet result = dbHandler.getUser(loginName, loginPass);
         if(result == null) {
-            //ебануть чето что скажет шо база данных афк
-
+            clientIsActive = false;
+            Server.removeServerThread(this);
+            try {
+                out.writeObject(new ClientMessage("", "", MessageFlag.LOG_OUT_FROM_SERVER));
+                out.flush();
+                return false;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
         int counter = 0;
         try {
             while (result.next()) {
@@ -116,17 +122,24 @@ class ServerThread extends Thread {
         }catch (SQLException e){
             e.printStackTrace();
         }
-
         return (counter != 0);
     }
 
     private boolean userExists(String loginName) {
         ResultSet result = dbHandler.getUser(loginName);
         if(result == null) {
-            //ебануть чето что скажет шо база данных афк
-
+            if(result == null) {
+                clientIsActive = false;
+                Server.removeServerThread(this);
+                try {
+                    out.writeObject(new ClientMessage("", "", MessageFlag.LOG_OUT_FROM_SERVER));
+                    out.flush();
+                    return false;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-
         int counter = 0;
         try {
             while (result.next()) {
@@ -135,7 +148,6 @@ class ServerThread extends Thread {
         }catch (SQLException e){
             e.printStackTrace();
         }
-
         return (counter != 0);
     }
 }

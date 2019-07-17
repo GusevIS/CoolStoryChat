@@ -2,51 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebe6325a-5572-450f-b7cf-f3e7bf9c017b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/description.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/mysql_connector_java_8_0_16.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktopMessenger.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/META-INF/desktopMessenger.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/AuthorisationController$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/AuthorisationController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/AuthorisationMessage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/ChatController$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/ChatController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/Client.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/ClientMessage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/Configs.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/DatabaseHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/ErrorFormController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/MessageFlag.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/Server.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/ServerThread$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/ServerThread.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/UserFields.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/authorisationForm.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/chatForm.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/desktopMessenger/desktopMessenger/errorForm.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/AuthorisationController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/AuthorisationMessage.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/ChatController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/Client.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/ClientMessage.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/Configs.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/DatabaseHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/ErrorFormController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/MessageFlag.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/Server.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/ServerThread.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/UserFields.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/authorisationForm.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/chatForm.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/desktopMessenger/errorForm.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pom.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -85,11 +41,34 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/main/java/Client.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="306">
               <caret line="26" column="67" selection-start-line="26" selection-start-column="67" selection-end-line="26" selection-end-column="67" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Server/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="367">
+              <caret line="25" column="18" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Client/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="612">
+              <caret line="36" column="19" selection-start-line="36" selection-start-column="19" selection-end-line="36" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -112,13 +91,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/Server/pom.xml" />
         <option value="$PROJECT_DIR$/Client/pom.xml" />
         <option value="$PROJECT_DIR$/Server/src/main/java/DatabaseHandler.java" />
         <option value="$PROJECT_DIR$/Server/src/main/java/ServerThread.java" />
         <option value="$PROJECT_DIR$/Client/src/main/java/AuthorisationController.java" />
         <option value="$PROJECT_DIR$/Client/src/main/java/ChatController.java" />
         <option value="$PROJECT_DIR$/Client/src/main/java/Client.java" />
+        <option value="$PROJECT_DIR$/Server/pom.xml" />
       </list>
     </option>
   </component>
@@ -221,6 +200,7 @@
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../mysql-connector-java-8.0.16/mysql-connector-java-8.0.16.jar!/" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -312,16 +292,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="47" column="19" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Server/src/main/java/DatabaseHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1224">
@@ -378,13 +348,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="452">
-          <caret line="36" column="19" selection-start-line="36" selection-start-column="19" selection-end-line="36" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/main/java/AuthorisationController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-194">
@@ -415,6 +378,23 @@
           <caret line="26" column="67" selection-start-line="26" selection-start-column="67" selection-end-line="26" selection-end-column="67" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" column="19" selection-start-line="36" selection-start-column="19" selection-end-line="36" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Server/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="25" column="18" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
   <component name="masterDetails">

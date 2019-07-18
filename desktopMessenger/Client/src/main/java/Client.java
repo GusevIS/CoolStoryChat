@@ -1,38 +1,137 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
 
-public class Client extends Application {
-    private static final Gson gson = new GsonBuilder().create();
+public class Client{
+    private boolean connectedToChat;
+    private Socket clientSocket;
+    private String clientName;
+    private BufferedReader in;
+    private BufferedWriter out;
+    private final Gson GSON = new GsonBuilder().create();
 
-    @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/authorisationForm.fxml"));
-        primaryStage.setTitle("CoolStoryChat");
-        primaryStage.setScene(new Scene(root, 500, 300));
-        primaryStage.show();
+    public Client(){
+        connectedToChat = false;
     }
 
-    @Override
-    public void stop(){
-        if(AuthorisationController.getOut() != null){
-            try {
-                String msg = gson.toJson(new ClientMessage("", "", MessageFlag.LOG_OUT_FROM_SERVER));
-                AuthorisationController.getOut().write(msg + "\n");
-                AuthorisationController.getOut().flush();
-            } catch (IOException e) {
-                e.printStackTrace();
+    public void getServerConnection() throws IOException {
+        clientSocket = new Socket("localhost", 4990);
+        setOut(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())));
+        setIn(new BufferedReader(new InputStreamReader(clientSocket.getInputStream())));
+    }
+
+    public boolean signIn(String loginName,String loginPass){
+        try {
+            String authMsg = GSON.toJson(new AuthorisationMessage(loginName, loginPass, MessageFlag.SIGN_IN));
+            out.write(authMsg + "\n");
+            out.flush();
+
+            String msg;
+            msg = in.readLine();
+            AuthorisationMessage authMessage = GSON.fromJson(msg, AuthorisationMessage.class);
+            switch (authMessage.getFlag()) {
+                case SUCCESSFUL_SIGN_IN:
+                    connectedToChat = true;
+                    clientName = authMessage.getUsername();
+                    return true;
+
+                case FAILED_SIGN_IN:
+                    return false;
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean signUp(String loginName, String loginPass){
+        try {
+            String authMsg = GSON.toJson(new AuthorisationMessage(loginName, loginPass, MessageFlag.SIGN_UP));
+            out.write(authMsg + "\n");
+            out.flush();
+
+            String msg;
+            msg = in.readLine();
+
+            AuthorisationMessage authMessage = getGSON().fromJson(msg, AuthorisationMessage.class);
+
+            switch (authMessage.getFlag()) {
+                case SUCCESSFUL_SIGN_UP:
+                    return true;
+
+                case FAILED_SIGN_UP:
+                    return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void sendMessage(String message){
+        try {
+            String msg = GSON.toJson(new ClientMessage(clientName, message, MessageFlag.DEFAULT_MESSAGE));
+            out.write(msg + "\n");
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public void logOutFromChat(){
+        try {
+            System.out.println("log out from chat");
+            String authMsg = GSON.toJson(new ClientMessage("", "", MessageFlag.LOG_OUT_FROM_CHAT));
+            out.write(authMsg + "\n");
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isConnectedToChat() {
+        return connectedToChat;
+    }
+
+    public void setConnectedToChat(boolean connectedToChat) {
+        this.connectedToChat = connectedToChat;
+    }
+
+    public Socket getClientSocket() {
+        return clientSocket;
+    }
+
+    public void setClientSocket(Socket clientSocket) {
+        this.clientSocket = clientSocket;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public BufferedReader getIn() {
+        return in;
+    }
+
+    public void setIn(BufferedReader in) {
+        this.in = in;
+    }
+
+    public BufferedWriter getOut() {
+        return out;
+    }
+
+    public void setOut(BufferedWriter out) {
+        this.out = out;
+    }
+
+    public Gson getGSON() {
+        return GSON;
     }
 }

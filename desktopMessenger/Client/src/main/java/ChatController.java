@@ -12,8 +12,7 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 public class ChatController {
-    private final Gson gson = new GsonBuilder().create();
-    private static String clientName;
+    private Client client;
 
     @FXML
     private Button sendButton;
@@ -29,6 +28,7 @@ public class ChatController {
 
     @FXML
     void initialize(){
+        client = Main.getClient();
         inputMsgArea.setWrapText(true);
         outputMsgArea.setWrapText(true);
         outputMsgArea.setEditable(false);
@@ -36,53 +36,26 @@ public class ChatController {
         sendButton.setOnAction(event -> {
             String msg = inputMsgArea.getText().trim();
             if(!msg.isEmpty()){
-                try {
-                    String authMsg = gson.toJson(new ClientMessage(getClientName(), msg, MessageFlag.DEFAULT_MESSAGE));
-                    AuthorisationController.getOut().write(authMsg + "\n");
-                    AuthorisationController.getOut().flush();
-                    inputMsgArea.setText("");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                client.sendMessage(msg);
+                inputMsgArea.setText("");
             }
         });
 
         LogOutButton.setOnAction(event -> {
-            try {
-                System.out.println("log out from chat");
-                String authMsg = gson.toJson(new ClientMessage("", "", MessageFlag.LOG_OUT_FROM_CHAT));
-                AuthorisationController.getOut().write(authMsg + "\n");
-                AuthorisationController.getOut().flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            LogOutButton.getScene().getWindow().hide();
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/authorisationForm.fxml"));
-
-            try {
-                loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Parent root = loader.getRoot();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
+            client.logOutFromChat();
+            showAuthorisation();
         });
 
-        getServerConnection();
+        getChatConnection();
     }
 
-    private void getServerConnection(){
+    private void getChatConnection(){
         new Thread(() -> {
             String msg;
             try {
-                while (AuthorisationController.getClientIsConnectedToChat()) {
-                    msg = AuthorisationController.getIn().readLine();
-                    ClientMessage messageFromServer = gson.fromJson(msg, ClientMessage.class);
+                while (client.isConnectedToChat()) {
+                    msg = client.getIn().readLine();
+                    ClientMessage messageFromServer = client.getGSON().fromJson(msg, ClientMessage.class);
 
                     switch (messageFromServer.getFlag()){
                         case DEFAULT_MESSAGE:
@@ -91,11 +64,11 @@ public class ChatController {
                             break;
 
                         case LOG_OUT_FROM_CHAT:
-                            AuthorisationController.setClientIsConnectedToChat(false);
+                            client.setConnectedToChat(false);
                             break;
 
                         case LOG_OUT_FROM_SERVER:
-                            AuthorisationController.setClientIsConnectedToChat(false);
+                            client.setConnectedToChat(false);
                             break;
                     }
                 }
@@ -105,11 +78,20 @@ public class ChatController {
         }).start();
     }
 
-    public static void setClientName(String name){
-        clientName = name;
-    }
+    public void showAuthorisation(){
+        LogOutButton.getScene().getWindow().hide();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/authorisationForm.fxml"));
 
-    public String getClientName(){
-        return clientName;
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Parent root = loader.getRoot();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }

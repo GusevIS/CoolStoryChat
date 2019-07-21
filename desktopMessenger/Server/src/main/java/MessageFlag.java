@@ -9,5 +9,7 @@ public enum MessageFlag {
 
     DEFAULT_MESSAGE,
     LOG_OUT_FROM_SERVER,
-    LOG_OUT_FROM_CHAT
+    LOG_OUT_FROM_CHAT,
+
+    DATABASE_OFFLINE
 }

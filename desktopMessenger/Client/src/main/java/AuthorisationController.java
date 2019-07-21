@@ -35,10 +35,16 @@ public class AuthorisationController {
             String loginPass = passwordField.getText().trim();
 
             if(!loginName.isEmpty() && !loginPass.isEmpty()) {
-                if(client.signIn(loginName, loginPass)){
-                    showChat();
-                }else {
-                    errorsLabel.setText("Incorrect username and/or password");
+                switch (client.signIn(loginName, loginPass)){
+                    case SUCCESSFUL_SIGN_IN:
+                        showChat();
+                        break;
+                    case FAILED_SIGN_IN:
+                        errorsLabel.setText("Incorrect username and/or password");
+                        break;
+                    case DATABASE_OFFLINE:
+                        showErrorForm();
+                        break;
                 }
             } else
                 errorsLabel.setText("Please, enter username and password");
@@ -49,11 +55,17 @@ public class AuthorisationController {
             String loginPass = passwordField.getText().trim();
 
             if(!loginName.isEmpty() && !loginPass.isEmpty()) {
-                if(client.signUp(loginName, loginPass))
-                    errorsLabel.setText("Successful registration");
-                else
-                    errorsLabel.setText("User with the same name already exists");
-
+                switch (client.signIn(loginName, loginPass)){
+                    case SUCCESSFUL_SIGN_UP:
+                        errorsLabel.setText("Successful registration");
+                        break;
+                    case FAILED_SIGN_UP:
+                        errorsLabel.setText("User with the same name already exists");
+                        break;
+                    case DATABASE_OFFLINE:
+                        showErrorForm();
+                        break;
+                }
             } else
                 errorsLabel.setText("Please, enter username and password");
         });
@@ -63,6 +75,23 @@ public class AuthorisationController {
         signInButton.getScene().getWindow().hide();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/chatForm.fxml"));
+
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Parent root = loader.getRoot();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    public void  showErrorForm(){
+        signInButton.getScene().getWindow().hide();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/errorForm.fxml"));
 
         try {
             loader.load();

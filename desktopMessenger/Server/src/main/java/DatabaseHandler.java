@@ -1,8 +1,6 @@
 import java.sql.*;
 
 public class DatabaseHandler extends Configs{
-    private Connection dbConnection;
-
     public Connection getDbConnection() throws ClassNotFoundException, SQLException{
         String URL = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?verifyServerCertificate=false"+
                 "&useSSL=false"+
@@ -12,7 +10,7 @@ public class DatabaseHandler extends Configs{
                 "&serverTimezone=UTC";
 
         Class.forName("com.mysql.cj.jdbc.Driver");
-        dbConnection = DriverManager.getConnection(URL, dbUser, dbPass);
+        Connection dbConnection = DriverManager.getConnection(URL, dbUser, dbPass);
         return  dbConnection;
     }
 
@@ -21,7 +19,8 @@ public class DatabaseHandler extends Configs{
                 + UserFields.USERS_NAME + "," + UserFields.USERS_PASSWORD + ")"
                 + "VALUES(?,?)";
         try {
-            PreparedStatement preparedStatement = getDbConnection().prepareStatement(insert);
+            Connection dbConnection = getDbConnection();
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(insert);
             preparedStatement.setString(1, userName);
             preparedStatement.setString(2, userPass);
 
@@ -40,7 +39,8 @@ public class DatabaseHandler extends Configs{
                 UserFields.USERS_NAME + "=? AND " + UserFields.USERS_PASSWORD + "=?";
 
         try {
-            PreparedStatement preparedStatement = getDbConnection().prepareStatement(select);
+            Connection dbConnection = getDbConnection();
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(select);
             preparedStatement.setString(1, userName);
             preparedStatement.setString(2, userPass);
 
@@ -60,7 +60,8 @@ public class DatabaseHandler extends Configs{
                 UserFields.USERS_NAME + "=?";
 
         try {
-            PreparedStatement preparedStatement = getDbConnection().prepareStatement(select);
+            Connection dbConnection = getDbConnection();
+            PreparedStatement preparedStatement = dbConnection.prepareStatement(select);
             preparedStatement.setString(1, userName);
 
             resultSet = preparedStatement.executeQuery();

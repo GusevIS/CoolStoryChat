@@ -104,7 +104,7 @@ class ServerThread extends Thread {
             clientIsActive = false;
             server.removeServerThread(this);
             try {
-                String authMsg = GSON.toJson(new ClientMessage("", "", MessageFlag.LOG_OUT_FROM_SERVER));
+                String authMsg = GSON.toJson(new ClientMessage("", "", MessageFlag.DATABASE_OFFLINE));
                 out.write(authMsg + "\n");
                 out.flush();
                 return false;
@@ -126,17 +126,15 @@ class ServerThread extends Thread {
     private boolean userExists(String loginName) {
         ResultSet result = dbHandler.getUser(loginName);
         if(result == null) {
-            if(result == null) {
-                clientIsActive = false;
-                server.removeServerThread(this);
-                try {
-                    String authMsg = GSON.toJson(new ClientMessage("", "", MessageFlag.LOG_OUT_FROM_SERVER));
-                    out.write(authMsg + "\n");
-                    out.flush();
-                    return false;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            clientIsActive = false;
+            server.removeServerThread(this);
+            try {
+                String authMsg = GSON.toJson(new ClientMessage("", "", MessageFlag.DATABASE_OFFLINE));
+                out.write(authMsg + "\n");
+                out.flush();
+                return false;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         int counter = 0;

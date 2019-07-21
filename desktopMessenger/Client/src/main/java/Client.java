@@ -22,7 +22,8 @@ public class Client{
         setIn(new BufferedReader(new InputStreamReader(clientSocket.getInputStream())));
     }
 
-    public boolean signIn(String loginName,String loginPass){
+    public MessageFlag signIn(String loginName, String loginPass){
+        AuthorisationMessage authMessage = null;
         try {
             String authMsg = GSON.toJson(new AuthorisationMessage(loginName, loginPass, MessageFlag.SIGN_IN));
             out.write(authMsg + "\n");
@@ -30,23 +31,19 @@ public class Client{
 
             String msg;
             msg = in.readLine();
-            AuthorisationMessage authMessage = GSON.fromJson(msg, AuthorisationMessage.class);
-            switch (authMessage.getFlag()) {
-                case SUCCESSFUL_SIGN_IN:
-                    connectedToChat = true;
-                    clientName = authMessage.getUsername();
-                    return true;
-
-                case FAILED_SIGN_IN:
-                    return false;
+            authMessage = GSON.fromJson(msg, AuthorisationMessage.class);
+            if (authMessage.getFlag() == MessageFlag.SUCCESSFUL_SIGN_IN) {
+                connectedToChat = true;
+                clientName = authMessage.getUsername();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+        return authMessage.getFlag();
     }
 
-    public boolean signUp(String loginName, String loginPass){
+    public MessageFlag signUp(String loginName, String loginPass){
+        AuthorisationMessage authMessage = null;
         try {
             String authMsg = GSON.toJson(new AuthorisationMessage(loginName, loginPass, MessageFlag.SIGN_UP));
             out.write(authMsg + "\n");
@@ -54,20 +51,11 @@ public class Client{
 
             String msg;
             msg = in.readLine();
-
-            AuthorisationMessage authMessage = getGSON().fromJson(msg, AuthorisationMessage.class);
-
-            switch (authMessage.getFlag()) {
-                case SUCCESSFUL_SIGN_UP:
-                    return true;
-
-                case FAILED_SIGN_UP:
-                    return false;
-            }
+            authMessage = getGSON().fromJson(msg, AuthorisationMessage.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+        return authMessage.getFlag();
     }
 
     public void sendMessage(String message){
